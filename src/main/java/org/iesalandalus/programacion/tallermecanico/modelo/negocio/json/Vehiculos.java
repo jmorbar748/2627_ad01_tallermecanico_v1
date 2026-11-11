@@ -56,8 +56,17 @@ public class Vehiculos implements IVehiculos {
     }
 
     private void escribir(List<Vehiculo> vehiculos) {
+
         try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FICHERO_VEHICULOS), vehiculos);
+            File archivo = new File(FICHERO_VEHICULOS);
+
+            File carpeta = archivo.getParentFile();
+            if (carpeta != null && !carpeta.exists()) {
+                carpeta.mkdirs();
+            }
+
+            mapper.writerWithDefaultPrettyPrinter().writeValue(archivo, vehiculos);
+
         } catch (IOException e) {
             System.out.println("Error al escribir en el fichero de vehículos: " + e.getMessage());
         }

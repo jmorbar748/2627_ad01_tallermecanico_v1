@@ -56,7 +56,15 @@ public class Clientes implements IClientes {
     private void escribir(List<Cliente> clientes) {
 
         try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FICHERO_CLIENTES), clientes);
+            File archivo = new File(FICHERO_CLIENTES);
+
+            File carpeta = archivo.getParentFile();
+            if (carpeta != null && !carpeta.exists()) {
+                carpeta.mkdirs();
+            }
+
+            mapper.writerWithDefaultPrettyPrinter().writeValue(archivo, clientes);
+
         } catch (IOException e) {
             System.out.println("Error al escribir en el fichero de clientes: " + e.getMessage());
         }
