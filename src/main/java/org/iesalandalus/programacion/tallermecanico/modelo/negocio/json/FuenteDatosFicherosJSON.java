@@ -9,16 +9,16 @@ public class FuenteDatosFicherosJSON implements IFuenteDatos {
 
     @Override
     public IClientes crearClientes() {
-        return null;
+        return Clientes.getInstancia();
     }
 
     @Override
     public IVehiculos crearVehiculos() {
-        return null;
+        return Vehiculos.getInstancia();
     }
 
     @Override
     public ITrabajos crearTrabajos() {
-        return null;
+        return Trabajos.getInstancia();
     }
 }
