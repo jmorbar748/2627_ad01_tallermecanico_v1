@@ -24,7 +24,7 @@ public class Main {
                 fabricaVista = FabricaVista.TEXTO;
             } else if (argumento.equalsIgnoreCase("-fdficherosxml")) {
                 fabricaFuenteDatos = FabricaFuenteDatos.FICHEROS_XML;
-            } else if (argumento.equalsIgnoreCase("-ficherosjson")) {
+            } else if (argumento.equalsIgnoreCase("-fidficherosjson")) {
 
                 fabricaFuenteDatos = FabricaFuenteDatos.FICHEROS_JSON;
 

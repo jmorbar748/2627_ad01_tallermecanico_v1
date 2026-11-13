@@ -14,12 +14,12 @@ import java.util.Objects;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "tipoTrabajo"
+        property = "tipo"
 )
 
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = Revision.class, name = "revision"),
-        @JsonSubTypes.Type(value = Mecanico.class, name = "mecanico"),
+        @JsonSubTypes.Type(value = Revision.class, name = "Revision"),
+        @JsonSubTypes.Type(value = Mecanico.class, name = "Mecanico"),
 })
 
 public abstract class Trabajo {
@@ -106,7 +106,12 @@ public abstract class Trabajo {
     }
 
     private void setFechaFin(LocalDate fechaFin) {
-        Objects.requireNonNull(fechaFin, "La fecha de fin no puede ser nula.");
+
+        if (fechaFin == null) {
+            this.fechaFin = null;
+            return;
+        }
+
         if (fechaFin.isBefore(fechaInicio)) {
             throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio.");
         }

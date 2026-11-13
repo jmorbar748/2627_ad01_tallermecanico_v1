@@ -54,45 +54,8 @@ public class Trabajos implements ITrabajos {
             return new ArrayList<>();
         }
         try {
-            ObjectMapper mapperLocal = new ObjectMapper();
-            mapperLocal.registerModule(new JavaTimeModule());
-            mapperLocal.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-
-            // Leemos el JSON como una lista de mapas
-            List<Map<String, Object>> listaJson = mapperLocal.readValue(file, new TypeReference<List<Map<String, Object>>>() {});
-            List<Trabajo> trabajos = new ArrayList<>();
-
-            for (Map<String, Object> mapa : listaJson) {
-                String tipo = (String) mapa.get("tipoTrabajo");
-                Cliente cliente = mapperLocal.convertValue(mapa.get("cliente"), Cliente.class);
-                Vehiculo vehiculo = mapperLocal.convertValue(mapa.get("vehiculo"), Vehiculo.class);
-                LocalDate fechaInicio = LocalDate.parse((String) mapa.get("fechaInicio"));
-                LocalDate fechaFin = mapa.get("fechaFin") != null ? LocalDate.parse((String) mapa.get("fechaFin")) : null;
-                int horas = (Integer) mapa.get("horas");
-
-                Trabajo trabajo = null;
-                if ("revision".equals(tipo)) {
-                    trabajo = new Revision(cliente, vehiculo, fechaInicio);
-                } else if ("mecanico".equals(tipo)) {
-                    trabajo = new Mecanico(cliente, vehiculo, fechaInicio);
-                    float precioMaterial = ((Number) mapa.get("precioMaterial")).floatValue();
-                    if (precioMaterial > 0){
-                        ((Mecanico) trabajo).anadirPrecioMaterial(precioMaterial);
-                    }
-                }
-
-                if (trabajo != null) {
-                    if (horas > 0) {
-                        trabajo.anadirHoras(horas);
-                    }
-                    if (fechaFin != null) {
-                        trabajo.cerrar(fechaFin);
-                    }
-                    trabajos.add(trabajo);
-                }
-            }
-            return trabajos;
-        } catch (IOException | TallerMecanicoExcepcion e) {
+            return mapper.readValue(file, new TypeReference<List<Trabajo>>() {});
+        } catch (IOException e) {
             System.out.println("Error al leer el fichero de trabajos: " + e.getMessage());
             return new ArrayList<>();
         }
@@ -116,9 +79,9 @@ public class Trabajos implements ITrabajos {
             for (Trabajo trabajo : trabajos) {
                 Map<String, Object> mapa = new LinkedHashMap<>();
                 if (trabajo instanceof Revision) {
-                    mapa.put("tipoTrabajo", "revision");
+                    mapa.put("tipo", "Revision");
                 } else if (trabajo instanceof Mecanico) {
-                    mapa.put("tipoTrabajo", "mecanico");
+                    mapa.put("tipo", "Mecanico");
                 }
                 mapa.put("cliente", trabajo.getCliente());
                 mapa.put("vehiculo", trabajo.getVehiculo());
